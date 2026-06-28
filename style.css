@@ -2,7 +2,6 @@
 :root {
     --bg-primary: #1e1f22;       /* 메인 피드 배경 */
     --bg-sidebar-left: #2b2d31;  /* 좌측 사이드바 배경 */
-    --bg-sidebar-right: #2b2d31; /* 우측 사이드바 배경 */
     --bg-card: #313338;          /* 질문 카드 배경 */
     --bg-card-hover: #383a40;    /* 질문 카드 호버 배경 */
     --bg-input: #383a40;         /* 입력창 배경 */
@@ -233,84 +232,7 @@ body {
     margin-left: 4px;
 }
 
-/* 3단: 우측 사이드바 (공지사항) */
-.sidebar-right {
-    width: 280px;
-    background-color: var(--bg-sidebar-right);
-    border-left: 1px solid var(--border-color);
-    display: flex;
-    flex-direction: column;
-    padding: 16px;
-    gap: 20px;
-    flex-shrink: 0;
-    overflow-y: auto;
-}
 
-.sidebar-right-header h3 {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text-header);
-    margin-bottom: 12px;
-}
-
-.notice-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.notice-card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 12px;
-    cursor: pointer;
-    transition: background-color var(--transition-speed), border-color var(--transition-speed);
-}
-
-.notice-card:hover {
-    background-color: var(--bg-card-hover);
-    border-color: var(--accent-color);
-}
-
-.notice-card h4 {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-header);
-    margin-bottom: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.notice-card .notice-date {
-    font-size: 11px;
-    color: var(--text-muted);
-}
-
-.today-tip-box {
-    background: linear-gradient(135deg, rgba(88, 101, 242, 0.1), rgba(88, 101, 242, 0.03));
-    border: 1px solid rgba(88, 101, 242, 0.3);
-    border-radius: 8px;
-    padding: 14px;
-    margin-top: auto;
-}
-
-.today-tip-box h4 {
-    font-size: 13px;
-    font-weight: 700;
-    color: #a5b4fc;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 6px;
-}
-
-.today-tip-box p {
-    font-size: 12px;
-    line-height: 1.5;
-    color: var(--text-muted);
-}
 
 /* 질문 목록 스크롤 피드 */
 .question-list-area {
@@ -657,31 +579,7 @@ body {
     justify-content: flex-end;
 }
 
-/* 공지사항 상세 */
-.notice-title-large {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text-header);
-    margin-bottom: 6px;
-}
 
-.notice-date-large {
-    font-size: 12px;
-    color: var(--text-muted);
-}
-
-.notice-detail-meta {
-    margin-bottom: 16px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 12px;
-}
-
-.notice-detail-text {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text-main);
-    white-space: pre-wrap;
-}
 
 /* 스크롤바 커스텀 */
 ::-webkit-scrollbar {

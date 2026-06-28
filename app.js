@@ -11,21 +11,6 @@ const CURRENT_USER = {
 // 기본 키워드 (과목 분류 태그)
 const DEFAULT_KEYWORDS = ["전체질문", "국어", "수학", "과학", "영어", "사회"];
 
-// 기본 공지사항 데이터
-const DEFAULT_NOTICES = [
-    {
-        id: "notice_1",
-        title: "기말고사 대비 질문 릴레이 안내",
-        content: "친구들과 함께 공부하며 모르는 문제를 마음껏 질문해 보세요!\n가장 친절하게 답변을 남겨준 친구에게는 이달의 우수 멘토 상장을 수여합니다.",
-        createdAt: "2026-06-28"
-    },
-    {
-        id: "notice_2",
-        title: "질문 작성 시 에티켓을 지켜주세요",
-        content: "질문을 작성할 때는 교과서 페이지나 구체적인 수식을 함께 적어주면 답변하기 수월합니다.\n바른 말과 따뜻한 댓글로 서로의 공부를 응원해 주세요.",
-        createdAt: "2026-06-27"
-    }
-];
 
 // 기본 질문 데이터 (초기 상태가 비어 보이지 않도록 샘플 데이터 설정)
 const DEFAULT_QUESTIONS = [
@@ -66,16 +51,12 @@ const DEFAULT_QUESTIONS = [
 if (!localStorage.getItem("qa_keywords")) {
     localStorage.setItem("qa_keywords", JSON.stringify(DEFAULT_KEYWORDS));
 }
-if (!localStorage.getItem("qa_notices")) {
-    localStorage.setItem("qa_notices", JSON.stringify(DEFAULT_NOTICES));
-}
 if (!localStorage.getItem("qa_questions")) {
     localStorage.setItem("qa_questions", JSON.stringify(DEFAULT_QUESTIONS));
 }
 
 // 메모리 상에서 다룰 데이터 변수들
 let keywords = JSON.parse(localStorage.getItem("qa_keywords"));
-let notices = JSON.parse(localStorage.getItem("qa_notices"));
 let questions = JSON.parse(localStorage.getItem("qa_questions"));
 
 // 현재 선택된 키워드 (기본값: '전체질문')
@@ -93,7 +74,6 @@ const currentKeywordTitleEl = document.getElementById("current-keyword-title");
 const currentKeywordDescEl = document.getElementById("current-keyword-desc");
 const btnOpenAskModal = document.getElementById("btn-open-ask-modal");
 const questionListArea = document.getElementById("question-list-area");
-const noticeListEl = document.getElementById("notice-list");
 
 // 모달 관련 요소들
 const askModal = document.getElementById("ask-modal");
@@ -116,12 +96,6 @@ const detailAnswersList = document.getElementById("detail-answers-list");
 const answerForm = document.getElementById("answer-form");
 const answerInput = document.getElementById("answer-input");
 
-const noticeModal = document.getElementById("notice-modal");
-const btnCloseNoticeModal = document.getElementById("btn-close-notice-modal");
-const btnCloseNoticeFooter = document.getElementById("btn-close-notice-footer");
-const noticeDetailTitle = document.getElementById("notice-detail-title");
-const noticeDetailDate = document.getElementById("notice-detail-date");
-const noticeDetailContent = document.getElementById("notice-detail-content");
 
 
 // ==========================================
@@ -239,23 +213,6 @@ function renderQuestions() {
     });
 }
 
-// 5-3. 우측 공지사항 목록 렌더링
-function renderNotices() {
-    noticeListEl.innerHTML = "";
-    notices.forEach(notice => {
-        const card = document.createElement("div");
-        card.className = "notice-card";
-        card.innerHTML = `
-            <h4>${escapeHTML(notice.title)}</h4>
-            <span class="notice-date">${notice.createdAt}</span>
-        `;
-        // 클릭 시 공지사항 보기 팝업
-        card.addEventListener("click", () => {
-            openNoticeModal(notice);
-        });
-        noticeListEl.appendChild(card);
-    });
-}
 
 // 5-4. HTML 인젝션(보안 취약점) 방지를 위한 텍스트 이스케이프 처리 함수
 function escapeHTML(str) {
@@ -400,23 +357,9 @@ btnAddKeyword.addEventListener("click", () => {
     renderKeywords();
 });
 
-// 6-7. 공지사항 모달 제어
-function openNoticeModal(notice) {
-    noticeDetailTitle.textContent = notice.title;
-    noticeDetailDate.textContent = `작성일: ${notice.createdAt}`;
-    noticeDetailContent.textContent = notice.content;
-    noticeModal.classList.add("active");
-}
-
-function closeNoticeModal() {
-    noticeModal.classList.remove("active");
-}
-btnCloseNoticeModal.addEventListener("click", closeNoticeModal);
-btnCloseNoticeFooter.addEventListener("click", closeNoticeModal);
 
 // ==========================================
 // 7. 앱 시작 (초기화 실행)
 // ==========================================
 renderKeywords();
 renderQuestions();
-renderNotices();
