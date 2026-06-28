@@ -8,8 +8,8 @@ const CURRENT_USER = {
     name: "테스트 유저"        // 사용자 이름
 };
 
-// 기본 키워드 (과목 분류 태그)
-const DEFAULT_KEYWORDS = ["전체질문", "국어", "수학", "과학", "영어", "사회"];
+// 기본 키워드 (중학교 과목 분류 태그)
+const DEFAULT_KEYWORDS = ["전체질문", "국어", "수학", "사회", "역사", "도덕", "과학", "기술·가정", "체육", "음악", "미술", "영어", "정보"];
 
 
 // 기본 질문 데이터 (초기 상태가 비어 보이지 않도록 샘플 데이터 설정)
@@ -47,9 +47,22 @@ const DEFAULT_QUESTIONS = [
 // ==========================================
 // 2. 로컬 스토리지 (브라우저 내장 저장소) 초기화
 // ==========================================
-// 로컬 스토리지에 데이터가 비어 있다면 기본값으로 세팅합니다.
-if (!localStorage.getItem("qa_keywords")) {
+// 로컬 스토리지에 데이터가 비어 있거나, 예전 6개짜리 기본 키워드라면 중학교 과목명으로 새로 세팅합니다.
+const oldKeywords = ["전체질문", "국어", "수학", "과학", "영어", "사회"];
+const storedKeywords = localStorage.getItem("qa_keywords");
+if (!storedKeywords) {
     localStorage.setItem("qa_keywords", JSON.stringify(DEFAULT_KEYWORDS));
+} else {
+    try {
+        const parsed = JSON.parse(storedKeywords);
+        // 저장된 키워드가 예전 6개 키워드 세트와 정확히 일치하는지 비교 검증합니다.
+        const isOldList = parsed.length === oldKeywords.length && parsed.every((val, index) => val === oldKeywords[index]);
+        if (isOldList) {
+            localStorage.setItem("qa_keywords", JSON.stringify(DEFAULT_KEYWORDS));
+        }
+    } catch (e) {
+        localStorage.setItem("qa_keywords", JSON.stringify(DEFAULT_KEYWORDS));
+    }
 }
 if (!localStorage.getItem("qa_questions")) {
     localStorage.setItem("qa_questions", JSON.stringify(DEFAULT_QUESTIONS));
