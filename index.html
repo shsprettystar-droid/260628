@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&A 스페이스 - 학생 질문 답변 공간</title>
+    <!-- Google Fonts 구글 폰트 적용 (Pretendard 스타일의 Noto Sans KR 사용) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome 아이콘 CDN (아이콘 사용을 위함) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 1단: 좌측 사이드바 (키워드 채널) -->
+        <aside class="sidebar-left" id="sidebar-keywords">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <h2>Q&A 스페이스</h2>
+            </div>
+            
+            <!-- 로그인 표시 영역 (테스트 유저 고정) -->
+            <div class="user-profile-summary">
+                <div class="avatar">U</div>
+                <div class="user-info">
+                    <span class="user-name">테스트 유저</span>
+                    <span class="user-status"><span class="status-dot"></span>온라인</span>
+                </div>
+            </div>
+
+            <!-- 과목 키워드 목록 -->
+            <div class="channel-group">
+                <div class="channel-group-header">
+                    <span>💡 과목 키워드</span>
+                    <button id="btn-add-keyword" title="키워드 추가"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <ul class="keyword-list" id="keyword-list">
+                    <!-- Javascript가 키워드 목록을 렌더링합니다 -->
+                </ul>
+            </div>
+        </aside>
+
+        <!-- 2단: 중앙 질문 게시판 -->
+        <main class="feed-container">
+            <header class="feed-header">
+                <div class="current-channel-info">
+                    <span class="hash-tag">#</span>
+                    <h1 id="current-keyword-title">전체질문</h1>
+                    <p id="current-keyword-desc" class="channel-desc">학교 수업 중 모르는 질문을 자유롭게 나누는 공간입니다.</p>
+                </div>
+                <button class="btn-primary" id="btn-open-ask-modal">
+                    <i class="fa-solid fa-pen-to-square"></i> 질문하기
+                </button>
+            </header>
+
+            <!-- 질문 목록 영역 -->
+            <section class="question-list-area" id="question-list-area">
+                <!-- 질문 카드가 동적으로 추가됩니다 -->
+            </section>
+        </main>
+
+        <!-- 3단: 우측 사이드바 (공지사항 및 요약) -->
+        <aside class="sidebar-right" id="sidebar-notices">
+            <div class="sidebar-right-header">
+                <h3>📢 공지사항</h3>
+            </div>
+            <div class="notice-list" id="notice-list">
+                <!-- 공지사항 목록이 여기에 렌더링됩니다 -->
+            </div>
+            
+            <!-- 사이드 정보 박스 -->
+            <div class="today-tip-box">
+                <h4><i class="fa-solid fa-lightbulb"></i> 오늘의 공부 팁</h4>
+                <p>"질문을 구체적으로 작성하면 친구들이 더 정확하고 빠른 답변을 남겨줄 수 있어요! 사진을 찍어 올리거나 교과서 쪽수를 적어주면 좋아요."</p>
+            </div>
+        </aside>
+    </div>
+
+    <!-- 모달 1: 질문 작성 모달 (질문하기 클릭 시 뜸) -->
+    <div class="modal-overlay" id="ask-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>질문 올리기</h3>
+                <button class="btn-close-modal" id="btn-close-ask-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="ask-form">
+                <div class="form-group">
+                    <label for="ask-title">질문 제목</label>
+                    <input type="text" id="ask-title" placeholder="어떤 내용이 궁금한가요? 한 줄로 요약해 주세요." required>
+                </div>
+                <div class="form-group">
+                    <label for="ask-keyword">과목 키워드 선택</label>
+                    <select id="ask-keyword" required>
+                        <!-- 키워드 옵션 동적 삽입 -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ask-content">상세 내용</label>
+                    <textarea id="ask-content" rows="8" placeholder="궁금한 내용을 구체적으로 적어주세요. 예: 수학 교과서 34쪽 5번 문제가 풀이 과정 중 어디가 틀렸는지 모르겠어요." required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" id="btn-cancel-ask">취소</button>
+                    <button type="submit" class="btn-primary">등록하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 모달 2: 질문 상세 & 답변(댓글) 모달 (카드를 클릭하면 뜸) -->
+    <div class="modal-overlay" id="detail-modal">
+        <div class="modal-content detail-modal-content">
+            <div class="modal-header">
+                <span class="detail-keyword-badge" id="detail-keyword">수학</span>
+                <button class="btn-close-modal" id="btn-close-detail-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="detail-body">
+                <h2 class="detail-title" id="detail-title">수학 1 질문입니다.</h2>
+                <div class="detail-meta">
+                    <span class="detail-author" id="detail-author">작성자: 테스트 유저</span>
+                    <span class="detail-date" id="detail-date">작성일: 2026-06-28 14:35</span>
+                </div>
+                <div class="detail-text-content" id="detail-content">
+                    질문 내용 상세...
+                </div>
+            </div>
+
+            <!-- 답변 섹션 -->
+            <div class="detail-answers-section">
+                <h3>💬 답변 목록 (<span id="detail-answers-count">0</span>)</h3>
+                <div class="answers-list" id="detail-answers-list">
+                    <!-- 답변 목록 동적 삽입 -->
+                </div>
+
+                <!-- 답변 작성 폼 -->
+                <form id="answer-form" class="answer-write-form">
+                    <textarea id="answer-input" rows="3" placeholder="친절한 답변을 남겨 서로의 공부를 도와주세요!" required></textarea>
+                    <div class="answer-submit-area">
+                        <button type="submit" class="btn-primary">답변 등록</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 모달 3: 공지사항 상세 모달 (공지 클릭 시 뜸) -->
+    <div class="modal-overlay" id="notice-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📢 공지사항</h3>
+                <button class="btn-close-modal" id="btn-close-notice-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="notice-detail-body">
+                <h4 id="notice-detail-title" class="notice-title-large">공지 제목</h4>
+                <div class="notice-detail-meta">
+                    <span id="notice-detail-date" class="notice-date-large">작성일: 2026-06-28</span>
+                </div>
+                <div id="notice-detail-content" class="notice-detail-text">
+                    공지 상세 내용...
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" id="btn-close-notice-footer">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
